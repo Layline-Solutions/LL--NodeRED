@@ -1,6 +1,6 @@
 [
     {
-        "id": "2959e7e2d80b4f28",
+        "id": "05f3191c2a05d936",
         "type": "debug",
         "z": "c6323837a7dd5adc",
         "name": "H5000 PGN Data",
@@ -8,12 +8,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "x": 390,
-        "y": 340,
+        "x": 1350,
+        "y": 260,
         "wires": []
     },
     {
-        "id": "8a5b408a3419fa32",
+        "id": "5becb0a18e1346aa",
         "type": "debug",
         "z": "c6323837a7dd5adc",
         "name": "Subscription",
@@ -25,28 +25,28 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 830,
-        "y": 160,
+        "x": 1790,
+        "y": 80,
         "wires": []
     },
     {
-        "id": "80db955d5ea99d2a",
+        "id": "2279e17ddef2e8ab",
         "type": "function",
         "z": "c6323837a7dd5adc",
         "name": "Parse Data",
-        "func": "if (typeof msg.payload === \"string\") {\n    try {\n        msg.payload = JSON.parse(msg.payload);\n    } catch (e) {\n        node.warn(\"Invalid JSON\");\n        return null;\n    }\n}\nconst data = msg.payload.Data;\nif (!Array.isArray(data)) return null;\n\nconst variableMap = flow.get(\"variableMap\") || {};\nfor (const item of data) {\n    if (item.valid && typeof item.id === \"number\" && typeof item.val === \"number\") {\n        for (const [expId, entry] of Object.entries(variableMap)) {\n            if (entry.goFreeId === item.id) {\n                flow.set(entry.name, item.val);\n                break;\n            }\n        }\n    }\n}\nflow.set(\"lastValidUpdate\", Date.now());\nreturn null;\n",
+        "func": "if (typeof msg.payload === \"string\") {\n    try {\n        msg.payload = JSON.parse(msg.payload);\n    } catch (e) {\n        node.warn(\"Invalid JSON\");\n        return null;\n    }\n}\nconst data = msg.payload.Data;\nif (!Array.isArray(data)) return null;\n\nconst variableMap = flow.get(\"variableMap\") || {};\nfor (const item of data) {\n    if (item.valid && typeof item.id === \"number\" && typeof item.val === \"number\") {\n        for (const [expId, entry] of Object.entries(variableMap)) {\n            if (entry.goFreeId === item.id) {\n              \n                flow.set(entry.name, item.val);\n                flow.set(`${entry.name}_updated`, Date.now());\n                flow.set(\"lastValidUpdate\", Date.now());\n                break;\n            }\n        }\n    }\n}\nreturn null;\n",
         "outputs": 0,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 380,
+        "x": 1330,
+        "y": 300,
         "wires": []
     },
     {
-        "id": "6ac7ec695f440bb5",
+        "id": "8d1b2842d9c27332",
         "type": "debug",
         "z": "c6323837a7dd5adc",
         "name": "Ping",
@@ -58,12 +58,12 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 260,
+        "x": 2150,
+        "y": 180,
         "wires": []
     },
     {
-        "id": "08cddb7be8963b11",
+        "id": "66886ebb724d6c8c",
         "type": "debug",
         "z": "c6323837a7dd5adc",
         "name": "Status",
@@ -75,28 +75,28 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 230,
-        "y": 200,
+        "x": 1190,
+        "y": 120,
         "wires": []
     },
     {
-        "id": "9b6bfa7b98e9f587",
+        "id": "c50f5b85fc865f40",
         "type": "websocket in",
         "z": "c6323837a7dd5adc",
         "name": "GoFree In",
         "server": "",
         "client": "33f231d42a38fa26",
-        "x": 160,
-        "y": 380,
+        "x": 1120,
+        "y": 300,
         "wires": [
             [
-                "80db955d5ea99d2a",
-                "2959e7e2d80b4f28"
+                "2279e17ddef2e8ab",
+                "05f3191c2a05d936"
             ]
         ]
     },
     {
-        "id": "74c873f35f051e91",
+        "id": "b830cfa2ba5b8049",
         "type": "inject",
         "z": "c6323837a7dd5adc",
         "name": "Load Variables",
@@ -106,16 +106,16 @@
         "once": true,
         "onceDelay": "1",
         "topic": "",
-        "x": 125,
-        "y": 140,
+        "x": 1085,
+        "y": 60,
         "wires": [
             [
-                "6c2c0cb840015f55"
+                "7ad7da2d21bd3d0a"
             ]
         ]
     },
     {
-        "id": "9ebf89d0a8f73c73",
+        "id": "96e464272bbbf4ae",
         "type": "inject",
         "z": "c6323837a7dd5adc",
         "name": "Connect",
@@ -125,37 +125,37 @@
         "once": true,
         "onceDelay": "2",
         "topic": "",
-        "x": 420,
-        "y": 200,
+        "x": 1380,
+        "y": 120,
         "wires": [
             [
-                "ea6fe53edbc33f7e"
+                "eeb7bfde0d1d4a2a"
             ]
         ]
     },
     {
-        "id": "ea6fe53edbc33f7e",
+        "id": "eeb7bfde0d1d4a2a",
         "type": "function",
         "z": "c6323837a7dd5adc",
         "name": "Handshake",
-        "func": "function emit(msgObj, delay) {\n    setTimeout(() => {\n        node.send({ payload: msgObj });\n    }, delay);\n}\n\nconst variableMap = flow.get(\"variableMap\") || {};\nconst ids = Object.values(variableMap)\n    .map(entry => entry.goFreeId)\n    .filter(id => typeof id === \"number\");\n\nlet t = 0;\nemit({ Authentication: { id: 0 } }, t += 0);\nemit({ ProductIdReq: [] },      t += 200);\nemit({ FriendlyNameReq: [] },   t += 200);\nemit({ SettingInfoReq: [14,15,17,18,19,20,21] }, t += 200);\nemit({ EventReg: [5,10,21,24] }, t += 200);\nemit({ EventSet: [{ id: 21, action: \"request\" }] }, t += 200);\n\nconst dataReq = {\n    DataReq: ids.map(id => ({ id, repeat: true, inst: 0 }))\n};\nemit(dataReq, t += 200);\n\nreturn null;",
+        "func": "function emit(msgObj, delay) {\n    setTimeout(() => {\n        node.send({ payload: msgObj });\n    }, delay);\n}\n\nconst variableMap = flow.get(\"variableMap\") || {};\nconst ids = Object.values(variableMap)\n    .map(entry => entry.goFreeId)\n    .filter(id => typeof id === \"number\");\n\nlet t = 0;\nemit({ Authentication: { id: 0 } }, t += 0);\nemit({ ProductIdReq: [] },      t += 200);\nemit({ FriendlyNameReq: [] },   t += 200);\nemit({ SettingInfoReq: [14,15,17,18,19,20,21] }, t += 200);\nemit({ EventReg: [5,10,21,24] }, t += 200);\nemit({ EventSet: [{ id: 21, action: \"request\" }] }, t += 200);\n\n// Build bulk DataReq\nconst dataReq = {\n    DataReq: ids.map(id => ({ id, repeat: true, inst: 0 }))\n};\nemit(dataReq, t += 200);\n\nreturn null;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 630,
-        "y": 200,
+        "x": 1590,
+        "y": 120,
         "wires": [
             [
-                "3f178bdf7bd0aba1",
-                "8a5b408a3419fa32"
+                "5b3c6a6b4d461a67",
+                "5becb0a18e1346aa"
             ]
         ]
     },
     {
-        "id": "132f1951d5396733",
+        "id": "badc3e702861ee32",
         "type": "inject",
         "z": "c6323837a7dd5adc",
         "name": "pong every 15 s",
@@ -164,16 +164,16 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 810,
-        "y": 260,
+        "x": 1770,
+        "y": 180,
         "wires": [
             [
-                "70bcd91fa37f7c0a"
+                "0cee63c4ad90b011"
             ]
         ]
     },
     {
-        "id": "70bcd91fa37f7c0a",
+        "id": "0cee63c4ad90b011",
         "type": "function",
         "z": "c6323837a7dd5adc",
         "name": "Pong",
@@ -184,34 +184,34 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 990,
-        "y": 260,
+        "x": 1950,
+        "y": 180,
         "wires": [
             [
-                "3f178bdf7bd0aba1",
-                "6ac7ec695f440bb5"
+                "5b3c6a6b4d461a67",
+                "8d1b2842d9c27332"
             ]
         ]
     },
     {
-        "id": "9d05e818387854de",
+        "id": "99b545de23e7fcd4",
         "type": "status",
         "z": "c6323837a7dd5adc",
         "name": "WS status",
         "scope": [
-            "3f178bdf7bd0aba1"
+            "5b3c6a6b4d461a67"
         ],
-        "x": 80,
-        "y": 260,
+        "x": 1040,
+        "y": 180,
         "wires": [
             [
-                "53a1cc0a3ab4b509",
-                "08cddb7be8963b11"
+                "b623191bd61aef7f",
+                "66886ebb724d6c8c"
             ]
         ]
     },
     {
-        "id": "53a1cc0a3ab4b509",
+        "id": "b623191bd61aef7f",
         "type": "function",
         "z": "c6323837a7dd5adc",
         "name": "Auto-re-subscribe",
@@ -222,57 +222,57 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 260,
+        "x": 1350,
+        "y": 180,
         "wires": [
             [
-                "ea6fe53edbc33f7e"
+                "eeb7bfde0d1d4a2a"
             ]
         ]
     },
     {
-        "id": "3f178bdf7bd0aba1",
+        "id": "5b3c6a6b4d461a67",
         "type": "websocket out",
         "z": "c6323837a7dd5adc",
         "name": "GoFree Out",
         "server": "",
         "client": "33f231d42a38fa26",
-        "x": 1210,
-        "y": 200,
+        "x": 2170,
+        "y": 120,
         "wires": []
     },
     {
-        "id": "6c2c0cb840015f55",
+        "id": "7ad7da2d21bd3d0a",
         "type": "function",
         "z": "c6323837a7dd5adc",
         "name": "Variables",
-        "func": "const variableMap = {\n    4: { name: \"aws\", goFreeId: 140 },\n    2: { name: \"twa\", goFreeId: 141 },\n    3: { name: \"tws\", goFreeId: 142 },\n    5: { name: \"boatSpeed\", goFreeId: 6 }\n};\nflow.set(\"variableMap\", variableMap);\nreturn null;",
+        "func": "const variableMap = {\n    1: { name: \"BSP\", goFreeId: 42 },\n    2: { name: \"AWA\", goFreeId: 140 },\n    3: { name: \"AWS\", goFreeId: 46 },\n    4: { name: \"TWA\", goFreeId: 141 },\n    5: { name: \"TWS\", goFreeId: 47 },\n    6: { name: \"TWD\", goFreeId: 142 },\n    10: { name: \"Leeway\", goFreeId: 226 },\n    11: { name: \"Set\", goFreeId: 39 },\n    12: { name: \"Drift\", goFreeId: 40 },\n    15: { name: \"HDG\", goFreeId: 37 },\n    17: { name: \"Depth\", goFreeId: 77 },\n    18: { name: \"Heel\", goFreeId: 325 },\n    19: { name: \"Trim\", goFreeId: 123 },\n    22: { name: \"FstyLoad\", goFreeId: 393 },\n    48: { name: \"Lattitude\", goFreeId: 309 },\n    49: { name: \"Longitude\", goFreeId: 310 },\n    50: { name: \"COG\", goFreeId: 9 },\n    51: { name: \"SOG\", goFreeId: 41 },\n    238: { name: \"TargBSP\", goFreeId: 234 },\n    237: { name: \"TargTWA\", goFreeId: 228 },\n    173: { name: \"User1\", goFreeId: 217 },\n    174: { name: \"User 2\", goFreeId: 218 },\n    175: { name: \"User 3\", goFreeId: 219 },\n    176: { name: \"User 4\", goFreeId: 223 },\n    177: { name: \"User 5\", goFreeId: 364 },\n    178: { name: \"User 6\", goFreeId: 365 },\n    179: { name: \"User 7\", goFreeId: 366 },\n    180: { name: \"User 8\", goFreeId: 367 },\n    181: { name: \"User 9\", goFreeId: 368 },\n    182: { name: \"User 10\", goFreeId: 369 },\n    183: { name: \"User 11\", goFreeId: 370 },\n    184: { name: \"User 12\", goFreeId: 371 },\n    185: { name: \"User 13\", goFreeId: 372 },\n    186: { name: \"User 14\", goFreeId: 373 },\n    187: { name: \"User 15\", goFreeId: 374 },\n    188: { name: \"User 16\", goFreeId: 375 },\n    189: { name: \"User 17\", goFreeId: 481 },\n    190: { name: \"User 18\", goFreeId: 482 },\n    191: { name: \"User 19\", goFreeId: 483 },\n    192: { name: \"User 20\", goFreeId: 484 },\n    193: { name: \"User 21\", goFreeId: 485 },\n    194: { name: \"User 22\", goFreeId: 486 },\n    195: { name: \"User 23\", goFreeId: 487 },\n    196: { name: \"User 24\", goFreeId: 488 },\n    197: { name: \"User 25\", goFreeId: 489 },\n    198: { name: \"User 26\", goFreeId: 490 },\n    199: { name: \"User 27\", goFreeId: 491 },\n    200: { name: \"User 28\", goFreeId: 492 },\n    201: { name: \"User 29\", goFreeId: 493 },\n    202: { name: \"User 30\", goFreeId: 494 },\n    203: { name: \"User 31\", goFreeId: 495 }\n\n};\nflow.set(\"variableMap\", variableMap);\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 140,
+        "x": 1320,
+        "y": 60,
         "wires": [
             []
         ]
     },
     {
-        "id": "fbf55c3b0cc1778c",
+        "id": "4787b7757ba5982e",
         "type": "comment",
         "z": "c6323837a7dd5adc",
         "name": "Update IP to match B&G - 192.168.0.2 is default",
         "info": "",
-        "x": 1320,
-        "y": 160,
+        "x": 2280,
+        "y": 80,
         "wires": []
     },
     {
         "id": "33f231d42a38fa26",
         "type": "websocket-client",
-        "path": "ws://192.168.0.2:2053/ws",
+        "path": "ws://10.10.6.10:2053/ws",
         "tls": "",
         "wholemsg": "false",
         "hb": "0",
